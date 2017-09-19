@@ -15,9 +15,9 @@ namespace NFePHP\DA\MDFe;
  * @author    Leandro C. Lopez <leandro dot castoldi at gmail dot com>
  */
 
-use NFePHP\Common\Dom\Dom;
 use NFePHP\DA\Legacy\Common;
 use NFePHP\DA\Legacy\Pdf;
+use NFePHP\DA\Legacy\Dom;
 
 class Damdfe extends Common
 {
@@ -129,7 +129,7 @@ class Damdfe extends Common
             $this->errStatus = true;
         }
 
-//        $docxml = file_get_contents($xmlfile);
+        $this->xml = file_get_contents($xmlfile);
         $this->dom = new Dom();
         $this->dom->loadXML($this->xml);
         $this->mdfeProc = $this->dom->getElementsByTagName("mdfeProc")->item(0);
@@ -184,7 +184,9 @@ class Damdfe extends Common
         if ($this->dom->getElementsByTagName("valePed")->item(0) != "") {
             $this->valePed = $this->dom->getElementsByTagName("valePed")->item(0)->getElementsByTagName("disp");
         }
-        $this->infCpl = $this->dom->getElementsByTagName("infCpl")->item(0)->nodeValue;
+        if ($this->dom->getElementsByTagName("infCpl")->item(0) != "") {
+            $this->infCpl = $this->dom->getElementsByTagName("infCpl")->item(0)->nodeValue;
+        }
         $this->chMDFe = str_replace(
             'MDFe',
             '',
@@ -330,7 +332,7 @@ class Damdfe extends Common
         $CEP = 'CEP: '.$this->pFormat($CEP, "##.###-###");
         $UF = 'UF: '.$this->UF;
         $mun = 'Municipio: '.$this->xMun;
-        
+
         $texto = $razao . "\n" . $cnpj . ' - ' . $ie . "\n";
         $texto .= $lgr . ' - ' . $nro . "\n";
         $texto .= $bairro . "\n";
@@ -372,7 +374,7 @@ class Damdfe extends Common
         $aFont = array('font'=>$this->fontePadrao, 'size'=>8, 'style'=>'I');
         $texto = 'PROTOCOLO DE AUTORIZACAO DE USO';
         $this->pTextBox($x, $y, $w, 8, $texto, $aFont, 'T', 'L', 0, '');
-        
+
         $aFont = array('font'=>$this->fontePadrao, 'size'=>10, 'style'=>'');
         if (is_object($this->mdfeProc)) {
             $tsHora = $this->pConvertTime($this->dhRecbto);
@@ -422,7 +424,7 @@ class Damdfe extends Common
         }
         return $y;
     }// fim headerMDFe
-    
+
     /**
      * headerMDFeRetrato
      *
@@ -586,7 +588,7 @@ class Damdfe extends Common
         }
         return $y+12;
     }// fim headerMDFe
-    
+
     /**
      * bodyMDFe
      *
