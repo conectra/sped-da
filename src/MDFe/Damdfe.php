@@ -54,6 +54,7 @@ class Damdfe extends Common
     protected $dhRegEvento;
     protected $nProt;
     protected $tpEmis;
+    protected $infCpl;
     //objetos
     private $dom;
     private $procEventoNFe;
