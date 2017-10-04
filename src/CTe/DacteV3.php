@@ -95,6 +95,7 @@ class DacteV3 extends Common
     protected $nomeDesenvolvedor;
     protected $totPag;
     protected $idDocAntEle = [];
+    protected $procCancCTe;
 
     /**
      * __construct
@@ -270,6 +271,7 @@ class DacteV3 extends Common
             $this->protCTe = $this->dom->getElementsByTagName("protCTe")->item(0);
             //01-Rodoviário; //02-Aéreo; //03-Aquaviário; //04-Ferroviário;//05-Dutoviário
             $this->modal = $this->pSimpleGetValue($this->ide, "modal");
+            $this->procCancCTe = $this->dom->getElementsByTagName("procCancCTe")->item(0);
         }
     }
 
@@ -1047,7 +1049,7 @@ class DacteV3 extends Common
         //Indicação de CTe Homologação, cancelamento e falta de protocolo
         $tpAmb = $this->ide->getElementsByTagName('tpAmb')->item(0)->nodeValue;
         //indicar cancelamento
-        $cStat = $this->pSimpleGetValue($this->cteProc, "cStat");
+        $cStat = $this->pSimpleGetValue($this->procCancCTe, "cStat");
         if ($cStat == '101' || $cStat == '135' || $this->situacao_externa == self::NFEPHP_SITUACAO_EXTERNA_CANCELADA) {
             //101 Cancelamento
             $x = 10;
@@ -2704,7 +2706,7 @@ class DacteV3 extends Common
         $this->pTextBox($x, $y + 3, $w * 0.23, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x += $w * 0.23;
 
-        $this->pdf->Line($x-20, $y, $x-20, $y + 6); // LINHA A FRENTE DA RNTRC DA EMPRESA
+        $this->pdf->Line($x-20, $y, $x-20, $y + 8.5); // LINHA A FRENTE DA RNTRC DA EMPRESA
 
         $texto = 'ESTE CONHECIMENTO DE TRANSPORTE ATENDE À LEGISLAÇÃO DE TRANSPORTE RODOVIÁRIO EM VIGOR';
         $aFont = $this->formatPadrao;
