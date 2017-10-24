@@ -524,7 +524,8 @@ class Damdfe extends Common
         $bH = 16;
         $w = $maxW;
         $this->pdf->SetFillColor(0, 0, 0);
-        $this->pdf->Code128($x + 5, $y+2, $this->chMDFe, $maxW - 10, $bH);
+        //$this->pdf->Code128($x + 5, $y+2, $this->chMDFe, $maxW - 10, $bH);
+        $this->pdf->Code128($x + 35, $y + 2, $this->chMDFe, $maxW - 70, $bH - 2);
         $this->pdf->SetFillColor(255, 255, 255);
         $y = $y + 22;
         $this->pTextBox($x, $y, $maxW, 10);
@@ -881,18 +882,19 @@ class Damdfe extends Common
         } else {
             $file = $this->pdfDir.$nome;
         }
-        if (($destino != 'I' || $destino != 'S') && $destino != 'F') {
+        if ($destino != 'I' && $destino != 'S' && $destino != 'F') {
             $destino = 'I';
         }
         if ($printer != '') {
             $command = "-P $printer";
         }
+
         $this->buildMDFe();
         $arq = $this->pdf->Output($file, $destino);
-        if ($destino == 'S') {
+        if ($destino == 'S' && $command != '') {
             //aqui pode entrar a rotina de impressão direta
             $command = "lpr $command $file";
-            system($comando, $retorno);
+            system($command, $retorno);
         }
 
         return $arq;
