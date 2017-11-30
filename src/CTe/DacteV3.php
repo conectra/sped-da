@@ -72,6 +72,8 @@ class DacteV3 extends Common
     protected $infNFe;
     protected $compl;
     protected $ICMS;
+    protected $ICMSSN;
+    protected $ICMSOutraUF;
     protected $imp;
     protected $toma4;
     protected $toma03;
@@ -191,6 +193,7 @@ class DacteV3 extends Common
             $this->compl = $this->dom->getElementsByTagName("compl");
             $this->ICMS = $this->dom->getElementsByTagName("ICMS")->item(0);
             $this->ICMSSN = $this->dom->getElementsByTagName("ICMSSN")->item(0);
+            $this->ICMSOutraUF = $this->dom->getElementsByTagName("ICMSOutraUF")->item(0);
             $this->imp = $this->dom->getElementsByTagName("imp")->item(0);
 
             $vTrib = $this->pSimpleGetValue($this->imp, "vTotTrib");
@@ -2062,11 +2065,15 @@ class DacteV3 extends Common
                 $texto = "60 - ICMS cobrado anteriormente por substituição tributária";
                 break;
             case '90':
-                $texto = "90 - ICMS outros";
+                if ($this->ICMSOutraUF) {
+                    $texto = "90 - ICMS Outra UF";
+                } elseif ($this->ICMSSN) {
+                    $texto = "90 - ICMS Simples Nacional";
+                } else {
+                    $texto = "90 - ICMS Outros";
+                }
                 break;
         }
-        $texto .= $this->pSimpleGetValue($this->ICMSSN, "indSN");
-        $texto = $texto == 1 ? 'Simples Nacional' : $texto;
         $aFont = $this->formatNegrito;
         $this->pTextBox($x, $y, $w * 0.26, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x += $w * 0.26;
