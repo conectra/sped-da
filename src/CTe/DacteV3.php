@@ -707,7 +707,7 @@ class DacteV3 extends Common
                 $texto = 'Substituto';
                 break;
             default:
-                $texto = 'ERRO' . $tpCTe . $tpServ;
+                $texto = 'ERRO' . $tpCTe;// . $tpServ;
         }
         $aFont = $this->formatNegrito;
         $this->pTextBox($x, $y1 + 3, $w * 0.5, $h1, $texto, $aFont, 'T', 'C', 0, '', false);
@@ -2061,6 +2061,8 @@ class DacteV3 extends Common
             case '90':
                 if ($this->ICMSOutraUF) {
                     $texto = "90 - ICMS Outra UF";
+                } elseif ($this->ICMSSN) {
+                    $texto = "90 - ICMS Simples Nacional";
                 } else {
                     $texto = "90 - ICMS Outros";
                 }
