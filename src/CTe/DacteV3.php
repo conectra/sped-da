@@ -1734,7 +1734,7 @@ class DacteV3 extends Common
         $y += 8;
         $x = $oldX;
         $this->pdf->Line($x, $y, $w + 1, $y);
-        $texto = 'PESO BRUTO (KG)';
+        $texto = 'PESO BRUTO';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 5,
@@ -1749,6 +1749,9 @@ class DacteV3 extends Common
             3,
             ",",
             "."
+        ).' '.$this->pSimpleGetValue(
+            $this->infQ->item(0),
+            "tpMed"
         );
         //$texto .= ' ' . $this->zUnidade($this->pSimpleGetValue($this->infQ->item(0), "cUnid"));
         $aFont = array(
@@ -1758,17 +1761,17 @@ class DacteV3 extends Common
         $this->pTextBox($x+2, $y + 3, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x = $w * 0.12;
         $this->pdf->Line($x+13.5, $y, $x+13.5, $y + 9);
-        $texto = 'PESO BASE CÁLCULO (KG)';
+        $texto = 'PESO BASE CÁLCULO';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 5,
             'style' => '');
         $this->pTextBox($x+20, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $texto = number_format(
-            $this->pSimpleGetValue(
+            0/*$this->pSimpleGetValue(
                 $this->infQ->item(0),
                 "qCarga"
-            ),
+            )*/,
             3,
             ",",
             "."
@@ -1780,17 +1783,17 @@ class DacteV3 extends Common
         $this->pTextBox($x+17, $y + 3, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x = $w * 0.24;
         $this->pdf->Line($x+25, $y, $x+25, $y + 9);
-        $texto = 'PESO AFERIDO (KG)';
+        $texto = 'PESO AFERIDO';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 5,
             'style' => '');
         $this->pTextBox($x+35, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $texto = number_format(
-            $this->pSimpleGetValue(
+            0/*$this->pSimpleGetValue(
                 $this->infQ->item(0),
                 "qCarga"
-            ),
+            )*/,
             3,
             ",",
             "."
