@@ -1761,6 +1761,7 @@ class DacteV3 extends Common
             'style' => '');
         $this->pTextBox($x+8, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $texto = number_format($qCarga, 3, ",", ".");
+        //$texto .= ' ' . $this->zUnidade($this->pSimpleGetValue($this->infQ->item(0), "cUnid"));
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 7,
@@ -1768,7 +1769,7 @@ class DacteV3 extends Common
         $this->pTextBox($x+2, $y + 3, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x = $w * 0.12;
         $this->pdf->Line($x+13.5, $y, $x+13.5, $y + 9);
-        $texto = 'PESO BASE CÁLCULO (KG)';
+        $texto = 'PESO BASE CÁLCULO';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 5,
@@ -1782,7 +1783,7 @@ class DacteV3 extends Common
         $this->pTextBox($x+17, $y + 3, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
         $x = $w * 0.24;
         $this->pdf->Line($x+25, $y, $x+25, $y + 9);
-        $texto = 'PESO AFERIDO (KG)';
+        $texto = 'PESO AFERIDO';
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 5,
