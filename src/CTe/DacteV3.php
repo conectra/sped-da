@@ -192,7 +192,7 @@ class DacteV3 extends Common
             if ($this->tpCTe == 1) {
                 $this->chaveCTeRef = $this->pSimpleGetValue($this->infCteComp, "chCTe");
             } else {
-                $this->chaveCTeRef = $this->pSimpleGetValue($this->infCteAnu, "chCte");
+                $this->chaveCTeRef = $this->pSimpleGetValue($this->infCteAnu, "chCte"); //
             }
             $this->vPrest = $this->dom->getElementsByTagName("vPrest")->item(0);
             $this->Comp = $this->dom->getElementsByTagName("Comp");
