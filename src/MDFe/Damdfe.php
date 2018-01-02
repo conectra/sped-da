@@ -17,7 +17,6 @@ namespace NFePHP\DA\MDFe;
 
 use NFePHP\DA\Legacy\Common;
 use NFePHP\DA\Legacy\Pdf;
-use NFePHP\DA\Legacy\Dom;
 
 class Damdfe extends Common
 {
