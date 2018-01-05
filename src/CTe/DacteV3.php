@@ -97,6 +97,8 @@ class DacteV3 extends Common
     protected $idDocAntEle = [];
     protected $procCancCTe;
 
+    protected $cteSub;
+
     /**
      * __construct
      *
@@ -204,9 +206,11 @@ class DacteV3 extends Common
             $this->ICMSSN = $this->dom->getElementsByTagName("ICMSSN")->item(0);
             $this->ICMSOutraUF = $this->dom->getElementsByTagName("ICMSOutraUF")->item(0);
             $this->imp = $this->dom->getElementsByTagName("imp")->item(0);
-            $textoAdic = number_format($this->pSimpleGetValue($this->imp, "vTotTrib"), 2, ",", ".");
+            $this->cteSub = $this->dom->getElementsByTagName("infCteSub")->item(0);
+            $vTrib = $this->pSimpleGetValue($this->imp, "vTotTrib");
+            $textoAdic = number_format(!is_numeric($vTrib) ? 0 : $vTrib, 2, ",", ".");
             $this->textoAdic = "o valor aproximado de tributos incidentes sobre o preço deste serviço é de R$"
-                    .$textoAdic;
+                .$textoAdic;
             $this->toma4 = $this->dom->getElementsByTagName("toma4")->item(0);
             $this->toma03 = $this->dom->getElementsByTagName("toma3")->item(0);
             //Tag tomador é identificado por toma03 na versão 2.00
@@ -754,15 +758,15 @@ class DacteV3 extends Common
         //0-Remetente;1-Expedidor;2-Recebedor;3-Destinatário;4 - Outros
         if ($toma==1) {
             $aFont = array(
-            'font' => $this->fontePadrao,
-            'size' => 11,
-            'style' => '');
+                'font' => $this->fontePadrao,
+                'size' => 11,
+                'style' => '');
             $this->pTextBox($x-14.5, $y2 + 3.5, $w * 0.5, $h1, 'X', $aFont, 'T', 'C', 0, '', false);
         } else {
             $aFont = array(
-            'font' => $this->fontePadrao,
-            'size' => 11,
-            'style' => '');
+                'font' => $this->fontePadrao,
+                'size' => 11,
+                'style' => '');
             $this->pTextBox($x+3.5, $y2 + 3.5, $w * 0.5, $h1, 'X', $aFont, 'T', 'C', 0, '', false);
         }
         $aFont = $this->formatNegrito;
@@ -1760,7 +1764,9 @@ class DacteV3 extends Common
             'size' => 5,
             'style' => '');
         $this->pTextBox($x+8, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format($qCarga, 3, ",", ".");
+        //$texto = $this->pSimpleGetValue($this->infQ->item(0), "qCarga") . "\r\n";
+        $texto = number_format($qCarga, 3,",",".")
+            .' '.$this->pSimpleGetValue($this->infQ->item(0),"tpMed");
         //$texto .= ' ' . $this->zUnidade($this->pSimpleGetValue($this->infQ->item(0), "cUnid"));
         $aFont = array(
             'font' => $this->fontePadrao,
@@ -1775,7 +1781,7 @@ class DacteV3 extends Common
             'size' => 5,
             'style' => '');
         $this->pTextBox($x+20, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format($qCarga, 3, ",", ".");
+        $texto = number_format(0, 3, ",", ".");
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 7,
@@ -2616,6 +2622,75 @@ class DacteV3 extends Common
             $yIniDados = $yIniDados + 4;
             $auxX = $oldX;
         }
+
+        if ($this->cteSub != null){
+
+            if($this->cteSub->getElementsByTagName('chCte')->item(0)->nodeValue){
+                $texto = $this->cteSub->getElementsByTagName('chCte')->item(0)->nodeValue;
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($auxX, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $texto = '';
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($w * 0.40, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $yIniDados += 3.5;
+            }
+
+            if($this->cteSub->getElementsByTagName('refCteAnu')->item(0)->nodeValue){
+                $texto = $this->cteSub->getElementsByTagName('refCteAnu')->item(0)->nodeValue;
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($auxX, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $texto = '';
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($w * 0.40, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $yIniDados += 3.5;
+            }
+
+            if($this->cteSub->getElementsByTagName('refNFe')->item(0)->nodeValue){
+                $texto = $this->cteSub->getElementsByTagName('refNFe')->item(0)->nodeValue;
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($auxX, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $texto = '';
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($w * 0.40, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $yIniDados += 3.5;
+            }
+
+            if($this->cteSub->getElementsByTagName('refCTe')->item(0)->nodeValue){
+                $texto = $this->cteSub->getElementsByTagName('refCTe')->item(0)->nodeValue;
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($auxX, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $texto = '';
+                $aFont = array(
+                    'font' => $this->fontePadrao,
+                    'size' => 8,
+                    'style' => '');
+                $this->pTextBox($w * 0.40, $yIniDados, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
+                $yIniDados += 3.5;
+            }
+
+        }
+
         $texto = $this->chaveCTeRef;
         $aFont = array(
             'font' => $this->fontePadrao,
@@ -3480,7 +3555,7 @@ class DacteV3 extends Common
     {
         try {
             $fone = !empty($field->getElementsByTagName("fone")->item(0)->nodeValue) ?
-            $field->getElementsByTagName("fone")->item(0)->nodeValue : '';
+                $field->getElementsByTagName("fone")->item(0)->nodeValue : '';
             $foneLen = strlen($fone);
             if ($foneLen > 0) {
                 $fone2 = substr($fone, 0, $foneLen - 4);
