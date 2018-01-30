@@ -1764,7 +1764,7 @@ class DacteV3 extends Common
             'size' => 5,
             'style' => '');
         $this->pTextBox($x+8, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        //$texto = $this->pSimpleGetValue($this->infQ->item(0), "qCarga") . "\r\n";
+        $qCarga = $this->pSimpleGetValue($this->infQ->item(0), "qCarga") . "\r\n";
         $texto = number_format($qCarga, 3,",",".")
             .' '.$this->pSimpleGetValue($this->infQ->item(0),"tpMed");
         //$texto .= ' ' . $this->zUnidade($this->pSimpleGetValue($this->infQ->item(0), "cUnid"));
@@ -1781,7 +1781,8 @@ class DacteV3 extends Common
             'size' => 5,
             'style' => '');
         $this->pTextBox($x+20, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
-        $texto = number_format(0, 3, ",", ".");
+        $qCarga = $this->pSimpleGetValue($this->infQ->item(0), "qCarga") . "\r\n";
+        $texto = number_format($qCarga, 3,",",".");
         $aFont = array(
             'font' => $this->fontePadrao,
             'size' => 7,
