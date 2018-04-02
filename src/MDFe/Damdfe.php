@@ -55,6 +55,7 @@ class Damdfe extends Common
     protected $nProt;
     protected $tpEmis;
     protected $infCpl;
+    protected $cUnid;
     //objetos
     private $dom;
     private $procEventoNFe;
@@ -173,6 +174,7 @@ class Damdfe extends Common
             $this->qCT = $this->dom->getElementsByTagName("qCT")->item(0)->nodeValue;
         }
         $this->qCarga = $this->dom->getElementsByTagName("qCarga")->item(0)->nodeValue;
+        $this->cUnid  = $this->dom->getElementsByTagName("cUnid")->item(0)->nodeValue;
         $this->infModal = $this->dom->getElementsByTagName("infModal")->item(0);
         $this->rodo = $this->dom->getElementsByTagName("rodo")->item(0);
         $this->ciot = "";
@@ -694,7 +696,7 @@ class Damdfe extends Common
         $this->pTextBox($x1, $y+4, $x2, 10, $texto, $aFont, 'T', 'C', 0, '', false);
         $x1 += $x2;
         $this->pTextBox($x1, $y, $x2, 12);
-        $texto = 'Peso Total (Kg)';
+        $texto = 'Peso Total (' . ($this->cUnid === '02' ? 'TON' : 'KG') . ')';
         $aFont = array('font'=>$this->fontePadrao, 'size'=>8, 'style'=>'');
         $this->pTextBox($x1, $y, $x2, 8, $texto, $aFont, 'T', 'L', 0, '', false);
         $texto = number_format($this->qCarga, 4, ', ', '.');
