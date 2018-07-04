@@ -2401,7 +2401,7 @@ class Danfe extends Common
                 $ICMS = $imposto->getElementsByTagName("ICMS")->item(0);
                 $IPI  = $imposto->getElementsByTagName("IPI")->item(0);
                 $textoProduto = $this->pDescricaoProduto($thisItem);
-                $linhaDescr = $this->pGetNumLinesProd($textoProduto, $w2, $aFont);
+                $linhaDescr = $this->pGetNumLinesProd($prod, $textoProduto, $w2, $aFont);
                 $h = round(($linhaDescr * $this->pdf->fontSize)+ ($linhaDescr * 0.5), 2);
                 $hUsado += $h;
                 if ($pag != $totpag) {
