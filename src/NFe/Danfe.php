@@ -2401,7 +2401,7 @@ class Danfe extends Common
                 $ICMS = $imposto->getElementsByTagName("ICMS")->item(0);
                 $IPI  = $imposto->getElementsByTagName("IPI")->item(0);
                 $textoProduto = $this->pDescricaoProduto($thisItem);
-                $linhaDescr = $this->pGetNumLines($textoProduto, $w2, $aFont);
+                $linhaDescr = $this->pGetNumLinesProd($textoProduto, $w2, $aFont);
                 $h = round(($linhaDescr * $this->pdf->fontSize)+ ($linhaDescr * 0.5), 2);
                 $hUsado += $h;
                 if ($pag != $totpag) {
@@ -2447,7 +2447,13 @@ class Danfe extends Common
                 $this->pTextBox($x, $y, $w5, $h, $texto, $aFont, 'T', 'C', 0, '');
                 //Unidade
                 $x += $w5;
-                $texto = $prod->getElementsByTagName("uCom")->item(0)->nodeValue;
+                $uCom  = $prod->getElementsByTagName("uCom")->item(0)->nodeValue;
+                $uTrib = $prod->getElementsByTagName("uTrib")->item(0)->nodeValue;
+                if ($uCom != $uTrib) {
+                    $texto = "C: {$uCom} \n T: {$uTrib}";
+                } else {
+                    $texto = $prod->getElementsByTagName("uCom")->item(0)->nodeValue;
+                }
                 $this->pTextBox($x, $y, $w6, $h, $texto, $aFont, 'T', 'C', 0, '');
                 $x += $w6;
                 if ($this->orientacao == 'P') {
@@ -2456,11 +2462,23 @@ class Danfe extends Common
                     $alinhamento = 'R';
                 }
                 // QTDADE
-                $texto = number_format($prod->getElementsByTagName("qCom")->item(0)->nodeValue, 4, ",", ".");
+                $qCom  = number_format($prod->getElementsByTagName("qCom")->item(0)->nodeValue, 4, ",", ".");
+                $qTrib = number_format($prod->getElementsByTagName("qTrib")->item(0)->nodeValue, 4, ",", ".");
+                if ($qCom != $qTrib) {
+                    $texto = "C: {$qCom} \n T: {$qTrib}";
+                } else {
+                    $texto = number_format($prod->getElementsByTagName("qCom")->item(0)->nodeValue, 4, ",", ".");
+                }
                 $this->pTextBox($x, $y, $w7, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 $x += $w7;
                 // Valor Unitário
-                $texto = number_format($prod->getElementsByTagName("vUnCom")->item(0)->nodeValue, 4, ",", ".");
+                $vUnCom  = number_format($prod->getElementsByTagName("vUnCom")->item(0)->nodeValue, 4, ",", ".");
+                $vUnTrib = number_format($prod->getElementsByTagName("vUnTrib")->item(0)->nodeValue, 4, ",", ".");
+                if ($vUnCom != $vUnTrib) {
+                    $texto = "C: {$vUnCom} \n T: {$vUnTrib}";
+                } else {
+                    $texto = number_format($prod->getElementsByTagName("vUnCom")->item(0)->nodeValue, 4, ",", ".");
+                }
                 $this->pTextBox($x, $y, $w8, $h, $texto, $aFont, 'T', $alinhamento, 0, '');
                 $x += $w8;
                 // Valor do Produto
@@ -2532,6 +2550,43 @@ class Danfe extends Common
             }
         }
         return $oldY+$hmax;
+    }
+
+    /**
+     * @param \DOMElement $prod
+     * @param             $text
+     * @param             $width
+     * @param array       $aFont
+     *
+     * @return number
+     */
+    protected function pGetNumLinesProd($prod, $text, $width, $aFont = ['font' => 'Times', 'size' => 8, 'style' => ''])
+    {
+        $num = $this::pGetNumLines($text, $width, $aFont);
+        if (
+            $num == 1 &&
+            (
+                !$this->hasSameNodeValue($prod, 'uCom', 'uTrib') ||
+                !$this->hasSameNodeValue($prod, 'qCom', 'qTrib') ||
+                !$this->hasSameNodeValue($prod, 'vUnCom', 'vUnTrib')
+            )
+        ) {
+            $num += 1;
+        }
+        return $num;
+    }
+    /**
+     * @param \DOMElement $element
+     * @param string      $left
+     * @param string      $right
+     *
+     * @return boolean
+     */
+    protected function hasSameNodeValue($element, $left, $right)
+    {
+        $v1 = $element->getElementsByTagName($left)->item(0)->nodeValue;
+        $v2 = $element->getElementsByTagName($right)->item(0)->nodeValue;
+        return $v1 == $v2;
     }
 
     /**
