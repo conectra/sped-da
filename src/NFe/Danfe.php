@@ -3045,7 +3045,7 @@ class Danfe extends Common
         if (0 === $nfRefs->length) {
             return $saida;
         }
-        foreach ($nfRefs as $nfRef) {
+        foreach ($nfRefs as $key => $nfRef) {
             if (empty($nfRef)) {
                 continue;
             }
@@ -3058,13 +3058,9 @@ class Danfe extends Common
                 $serie  = substr($chave_acesso, 22, 3);
                 $numero = substr($chave_acesso, 25, 9);
                 $saida .= sprintf($formaNfeRef, $serie, $numero, $cnpj, $data, $chave_acessoF);
-                if ($key == 5){
-                    $saida .= "\r\nNFe...";
-                    break;
-                }
             }
             $refNF = $nfRef->getElementsByTagName('refNF');
-            foreach ($refNF as $key => $umaRefNFe) {
+            foreach ($refNF as $umaRefNFe) {
                 $data = $umaRefNFe->getElementsByTagName('AAMM')->item(0)->nodeValue;
                 $cnpj = $umaRefNFe->getElementsByTagName('CNPJ')->item(0)->nodeValue;
                 $mod = $umaRefNFe->getElementsByTagName('mod')->item(0)->nodeValue;
@@ -3073,13 +3069,9 @@ class Danfe extends Common
                 $data = substr($data, 2, 2) . "/20" . substr($data, 0, 2);
                 $cnpj = $this->pFormat($cnpj, "##.###.###/####-##");
                 $saida .= sprintf($formaNfRef, $serie, $numero, $cnpj, $data, $mod);
-                if ($key == 5){
-                    $saida .= "\r\nNF...";
-                    break;
-                }
             }
             $refCTe = $nfRef->getElementsByTagName('refCTe');
-            foreach ($refCTe as $key => $chave_acessoRef) {
+            foreach ($refCTe as $chave_acessoRef) {
                 $chave_acesso = $chave_acessoRef->nodeValue;
                 $chave_acessoF = $this->pFormat($chave_acesso, $this->formatoChave);
                 $data = substr($chave_acesso, 4, 2)."/20".substr($chave_acesso, 2, 2);
@@ -3087,24 +3079,16 @@ class Danfe extends Common
                 $serie  = substr($chave_acesso, 22, 3);
                 $numero = substr($chave_acesso, 25, 9);
                 $saida .= sprintf($formaCTeRef, $serie, $numero, $cnpj, $data, $chave_acessoF);
-                if ($key == 5){
-                    $saida .= "\r\nCTe...";
-                    break;
-                }
             }
             $refECF = $nfRef->getElementsByTagName('refECF');
-            foreach ($refECF as $key => $umaRefNFe) {
+            foreach ($refECF as $umaRefNFe) {
                 $mod    = $umaRefNFe->getElementsByTagName('mod')->item(0)->nodeValue;
                 $nECF   = $umaRefNFe->getElementsByTagName('nECF')->item(0)->nodeValue;
                 $nCOO   = $umaRefNFe->getElementsByTagName('nCOO')->item(0)->nodeValue;
                 $saida .= sprintf($formaECFRef, $mod, $nECF, $nCOO);
-                if ($key == 5){
-                    $saida .= "\r\nECF...";
-                    break;
-                }
             }
             $refNFP = $nfRef->getElementsByTagName('refNFP');
-            foreach ($refNFP as $key => $umaRefNFe) {
+            foreach ($refNFP as $umaRefNFe) {
                 $data = $umaRefNFe->getElementsByTagName('AAMM')->item(0)->nodeValue;
                 $cnpj = ! empty($umaRefNFe->getElementsByTagName('CNPJ')->item(0)->nodeValue) ?
                     $umaRefNFe->getElementsByTagName('CNPJ')->item(0)->nodeValue :
@@ -3122,10 +3106,14 @@ class Danfe extends Common
                     $cpf_cnpj = $this->pFormat($cnpj, "##.###.###/####-##");
                 }
                 $saida .= sprintf($formaNfpRef, $serie, $numero, $cpf_cnpj, $data, $mod, $ie);
-                if ($key == 5){
-                    $saida .= "\r\nNFP...";
-                    break;
-                }
+            }
+            if ($key == 5){
+                if ($refNFe) $saida .= "\r\nNFe...";
+                if ($refNF) $saida .= "\r\nNF...";
+                if ($refCTe) $saida .= "\r\nCTe...";
+                if ($refECF) $saida .= "\r\nECF...";
+                if ($refNFP) $saida .= "\r\nNFP...";
+                break;
             }
         }
         return $saida;
