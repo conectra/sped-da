@@ -3108,11 +3108,7 @@ class Danfe extends Common
                 $saida .= sprintf($formaNfpRef, $serie, $numero, $cpf_cnpj, $data, $mod, $ie);
             }
             if ($key == 5){
-                if ($refNFe) $saida .= "\r\nNFe...";
-                if ($refNF) $saida .= "\r\nNF...";
-                if ($refCTe) $saida .= "\r\nCTe...";
-                if ($refECF) $saida .= "\r\nECF...";
-                if ($refNFP) $saida .= "\r\nNFP...";
+                $saida .= "\r\nRefs";
                 break;
             }
         }
