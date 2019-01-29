@@ -3050,7 +3050,7 @@ class Danfe extends Common
                 continue;
             }
             $refNFe = $nfRef->getElementsByTagName('refNFe');
-            foreach ($refNFe as $key => $chave_acessoRef) {
+            foreach ($refNFe as $chave_acessoRef) {
                 $chave_acesso = $chave_acessoRef->nodeValue;
                 $chave_acessoF = $this->pFormat($chave_acesso, $this->formatoChave);
                 $data = substr($chave_acesso, 4, 2)."/20".substr($chave_acesso, 2, 2);
