@@ -1053,7 +1053,7 @@ class DacteV3 extends Common
         //Indicação de CTe Homologação, cancelamento e falta de protocolo
         $tpAmb = $this->ide->getElementsByTagName('tpAmb')->item(0)->nodeValue;
         //indicar cancelamento
-        $cStat = $this->pSimpleGetValue($this->procCancCTe, "cStat");
+        $cStat = $this->pSimpleGetValue($this->procCancCTe, "cStat") || $this->pSimpleGetValue($this->protCTe, "cStat");
         if ($cStat == '101' || $cStat == '135' || $this->situacao_externa == self::NFEPHP_SITUACAO_EXTERNA_CANCELADA) {
             //101 Cancelamento
             $x = 10;
