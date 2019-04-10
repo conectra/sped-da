@@ -756,7 +756,7 @@ class Danfe extends Common
         } else {
             $this->pRodape($xInic, $this->hPrint + 1);
         }
-        if($nInicial && $totPag >= 2){
+        if($nInicial || $totPag >= 2){
             //loop para páginas seguintes
             for ($n = 2; $n <= $totPag; $n++) {
                 // fixa as margens
