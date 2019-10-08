@@ -391,7 +391,7 @@ class Damdfe extends Common
         $texto = $this->pFormat($this->chMDFe, $this->formatoChave);
         $this->pTextBox($x, $y+3, $w, 6, $texto, $aFont, 'T', 'C', 0, '');
         $y = $y + 11;
-        $this->pTextBox($x, $y, $w, 12);
+        $this->pTextBox($x, $y, $w, 10);
         $aFont = array('font'=>$this->fontePadrao, 'size'=>8, 'style'=>'I');
         $texto = 'PROTOCOLO DE AUTORIZACAO DE USO';
         $this->pTextBox($x, $y, $w, 8, $texto, $aFont, 'T', 'L', 0, '');
@@ -511,7 +511,7 @@ class Damdfe extends Common
         }
 
         if ($this->qrCodMDFe !== null) {
-            $this->pQRDAMDFE($y - 3);
+            $this->pQRDAMDFE($y-2);
         }
 
         $aFont = array('font' => $this->fontePadrao, 'size' => 10, 'style' => 'B');
@@ -621,7 +621,7 @@ class Damdfe extends Common
             }
             $this->pdf->SetTextColor(0, 0, 0);
         }
-        return $y + 8;
+        return $y + 12;
     }// fim headerMDFe
 
     /**
@@ -644,10 +644,10 @@ class Damdfe extends Common
         $this->pTextBox($x, $y, $x2 - 22, 12);
         $texto = 'Modelo';
         $aFont = array('font' => $this->fontePadrao, 'size' => 8, 'style' => '');
-        $this->pTextBox($x, $y, $x2 - 22, 8, $texto, $aFont, 'T', 'C', 0, '', false);
+        $this->pTextBox($x, $y, $x2 - 22, 12, $texto, $aFont, 'T', 'C', 0, '', false);
         $texto = $this->mod;
         $aFont = array('font' => $this->fontePadrao, 'size' => 10, 'style' => '');
-        $this->pTextBox($x, $y + 4, $x2 - 22, 8, $texto, $aFont, 'T', 'C', 0, '', false);
+        $this->pTextBox($x, $y + 4, $x2 - 22, 12, $texto, $aFont, 'T', 'C', 0, '', false);
 
         if ($this->orientacao == 'P') {
             $x1 += $x2 - 47.5;
@@ -947,8 +947,8 @@ class Damdfe extends Common
             array(-2, -2, -2, -2)
         )->setBackgroundColor('white');
         $qrcode = $bobj->getPngData();
-        $wQr = 35;
-        $hQr = 35;
+        $wQr = 30;
+        $hQr = 30;
         $yQr = ($y + $margemInterna);
         if ($this->orientacao == 'P') {
             $xQr = 160;
