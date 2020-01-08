@@ -3009,32 +3009,33 @@ class DacteV3 extends Common
         $aFont = $this->formatPadrao;
         $this->pTextBox($x, $y, $w * 0.23, $h, $texto, $aFont, 'T', 'L', 0, '');
         if ($this->infNF->item(0) !== null && $this->infNF->item(0)->getElementsByTagName('infUnidCarga') !== null) {
-            $texto = $this->infNF
-                ->item(0)
-                ->getElementsByTagName('infUnidCarga')
-                ->item(0)
-                ->getElementsByTagName('idUnidCarga')
-                ->item(0)->nodeValue;
+            $infUnidCarga = $this->infNF->item(0)->getElementsByTagName('infUnidCarga');
+
+            if ($infUnidCarga->length) {
+                $texto = '';
+            } else {
+                $texto = $infUnidCarga->item(0)->getElementsByTagName('idUnidCarga')->item(0)->nodeValue;
+            }
         } elseif ($this->infNFe->item(0) !== null
             && $this->infNFe->item(0)->getElementsByTagName('infUnidCarga') !== null
         ) {
-            $texto = $this->infNFe
-                ->item(0)
-                ->getElementsByTagName('infUnidCarga')
-                ->item(0)
-                ->getElementsByTagName('idUnidCarga')
-                ->item(0)
-                ->nodeValue;
+            $infUnidCarga = $this->infNFe->item(0)->getElementsByTagName('infUnidCarga');
+
+            if ($infUnidCarga->length) {
+                $texto = '';
+            } else {
+                $texto = $infUnidCarga->item(0)->getElementsByTagName('idUnidCarga')->item(0)->nodeValue;
+            }
         } elseif ($this->infOutros->item(0) !== null
             && $this->infOutros->item(0)->getElementsByTagName('infUnidCarga') !== null
         ) {
-            $texto = $this->infOutros
-                ->item(0)
-                ->getElementsByTagName('infUnidCarga')
-                ->item(0)
-                ->getElementsByTagName('idUnidCarga')
-                ->item(0)
-                ->nodeValue;
+            $infUnidCarga = $this->infOutros->item(0)->getElementsByTagName('infUnidCarga');
+
+            if ($infUnidCarga->length) {
+                $texto = '';
+            } else {
+                $texto = $infUnidCarga->item(0)->getElementsByTagName('idUnidCarga')->item(0)->nodeValue;
+            }
         } else {
             $texto = '';
         }
