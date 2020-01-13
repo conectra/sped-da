@@ -2903,7 +2903,7 @@ class Danfe extends Common
         $yVeic += $h;
         $texto = 'Distancia Entre Eixos(mm)..: '. $veiculoDistancia;
         $this->pTextBox($xVeic, $yVeic, $w1+50, $h, $texto, $aFont, 'T', 'L', 0, '');
-
+    }
     /**
      * @param \DOMElement $prod
      * @param             $text
