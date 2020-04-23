@@ -142,10 +142,10 @@ class Damdfe extends Common
         $this->mdfeProc = $this->dom->getElementsByTagName("mdfeProc")->item(0);
         $this->infMDFe = $this->dom->getElementsByTagName("infMDFe")->item(0);
         $this->emit = $this->dom->getElementsByTagName("emit")->item(0);
-        if ($this->dom->getElementsByTagName("CPF")->item(0)) {
-            $this->CPF = $this->dom->getElementsByTagName("CPF")->item(0)->nodeValue;
+        if ($this->dom->getElementsByTagName("emit")->item(0)->getElementsByTagName("CPF")->item(0)) {
+            $this->CPF = $this->dom->getElementsByTagName("emit")->item(0)->getElementsByTagName("CPF")->item(0)->nodeValue;
         } else {
-            $this->CNPJ = $this->dom->getElementsByTagName("CNPJ")->item(0)->nodeValue;
+            $this->CNPJ = $this->dom->getElementsByTagName("emit")->item(0)->getElementsByTagName("CNPJ")->item(0)->nodeValue;
         }
         $this->IE = $this->dom->getElementsByTagName("IE")->item(0)->nodeValue;
         $this->xNome = $this->dom->getElementsByTagName("xNome")->item(0)->nodeValue;
