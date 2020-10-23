@@ -276,6 +276,7 @@ class DacteV3 extends Common
             $this->modal = $this->getTagValue($this->ide, "modal");
             $this->procCancCTe = $this->dom->getElementsByTagName("procCancCTe")->item(0);
             $this->qrCodCte = $this->dom->getElementsByTagName('qrCodCTe')->item(0)->nodeValue;
+            $this->idDocAntEle = $this->dom->getElementsByTagName('idDocAntEle');
         }
     }
 
@@ -1750,9 +1751,9 @@ class DacteV3 extends Common
          * Identifica cÃ³digo da unidade
          */{
 
-            /**
-             * TP MED/UN MED 1
-             */{
+        /**
+         * TP MED/UN MED 1
+         */{
             $texto = 'TP MED/UN MED';
             $aFont = array(
                 'font' => $this->fontePadrao,
@@ -1774,9 +1775,9 @@ class DacteV3 extends Common
             $this->pdf->Line($x+13.5, $y, $x+13.5, $y + 9);
         }
 
-            /**
-             * TP MED/UN MED 2
-             */{
+        /**
+         * TP MED/UN MED 2
+         */{
             $texto = 'TP MED/UN MED';
             $aFont = array(
                 'font' => $this->fontePadrao,
@@ -1800,9 +1801,9 @@ class DacteV3 extends Common
             $this->pdf->Line($x+25, $y, $x+25, $y + 9);
         }
 
-            /**
-             * TP MED/UN MED 3
-             */{
+        /**
+         * TP MED/UN MED 3
+         */{
             $texto = 'TP MED/UN MED';
             $aFont = array(
                 'font' => $this->fontePadrao,
@@ -1827,9 +1828,9 @@ class DacteV3 extends Common
             $this->pdf->Line($x+41.3, $y, $x+41.3, $y + 9);
         }
 
-            /**
-             * CUBAGEM(M3)
-             */{
+        /**
+         * CUBAGEM(M3)
+         */{
             $texto = 'CUBAGEM(M3)';
             $aFont = $this->formatPadrao;
             $this->pTextBox($x+60, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
@@ -1849,9 +1850,9 @@ class DacteV3 extends Common
             //$this->pdf->Line($x+37, $y, $x+37, $y + 9);
         }
 
-            /**
-             * QTDE(VOL)
-             */{
+        /**
+         * QTDE(VOL)
+         */{
             $texto = 'QTDE(VOL)';
             $aFont = $this->formatPadrao;
             $this->pTextBox($x+85, $y, $w, $h, $texto, $aFont, 'T', 'L', 0, '');
@@ -1871,7 +1872,7 @@ class DacteV3 extends Common
             $x = $w * 0.53;
             $this->pdf->Line($x+56, $y, $x+56, $y + 9);
         }
-        }
+    }
         $x = $w * 0.53;
         $this->pdf->Line($x+56, $y, $x+56, $y + 9);
         /*$texto = 'NOME DA SEGURADORA';
@@ -2469,35 +2470,35 @@ class DacteV3 extends Common
         }
         foreach ($this->idDocAntEle as $k => $d) {
             $tp = 'CT-e';
-            $chaveCTe = $this->idDocAntEle->item($k)->getElementsByTagName('chave')->item(0)->nodeValue;
+            $chaveCTe = $this->idDocAntEle->item($k)->getElementsByTagName('chCTe')->item(0)->nodeValue;
             $numCTe = substr($chaveCTe, 25, 9);
             $serieCTe = substr($chaveCTe, 22, 3);
             $doc = $serieCTe . '/' . $numCTe;
             if ($auxX > $w * 0.90) {
-                $yIniDados = $yIniDados + 4;
+                $yIniDados = $yIniDados + 3.5;
                 $auxX = $oldX;
             }
             $texto = $tp;
             $aFont = array(
                 'font' => $this->fontePadrao,
-                'size' => 8,
+                'size' => 7,
                 'style' => '');
             $this->pTextBox($auxX, $yIniDados, $w * 0.10, $h, $texto, $aFont, 'T', 'L', 0, '');
-            $auxX += $w * 0.09;
+            $auxX += $w * 0.07;
             $texto = $chaveCTe;
             $aFont = array(
                 'font' => $this->fontePadrao,
-                'size' => 8,
+                'size' => 7,
                 'style' => '');
             $this->pTextBox($auxX, $yIniDados, $w * 0.27, $h, $texto, $aFont, 'T', 'L', 0, '');
             $auxX += $w * 0.28;
             $texto = $doc;
             $aFont = array(
                 'font' => $this->fontePadrao,
-                'size' => 8,
+                'size' => 7,
                 'style' => '');
             $this->pTextBox($auxX, $yIniDados, $w * 0.30, $h, $texto, $aFont, 'T', 'L', 0, '');
-            $auxX += $w * 0.14;
+            $auxX += $w * 0.15;
         }
     }
 
@@ -3009,33 +3010,32 @@ class DacteV3 extends Common
         $aFont = $this->formatPadrao;
         $this->pTextBox($x, $y, $w * 0.23, $h, $texto, $aFont, 'T', 'L', 0, '');
         if ($this->infNF->item(0) !== null && $this->infNF->item(0)->getElementsByTagName('infUnidCarga') !== null) {
-            $infUnidCarga = $this->infNF->item(0)->getElementsByTagName('infUnidCarga');
-
-            if ($infUnidCarga->length) {
-                $texto = '';
-            } else {
-                $texto = $infUnidCarga->item(0)->getElementsByTagName('idUnidCarga')->item(0)->nodeValue;
-            }
+            $texto = $this->infNF
+                ->item(0)
+                ->getElementsByTagName('infUnidCarga')
+                ->item(0)
+                ->getElementsByTagName('idUnidCarga')
+                ->item(0)->nodeValue;
         } elseif ($this->infNFe->item(0) !== null
             && $this->infNFe->item(0)->getElementsByTagName('infUnidCarga') !== null
         ) {
-            $infUnidCarga = $this->infNFe->item(0)->getElementsByTagName('infUnidCarga');
-
-            if ($infUnidCarga->length) {
-                $texto = '';
-            } else {
-                $texto = $infUnidCarga->item(0)->getElementsByTagName('idUnidCarga')->item(0)->nodeValue;
-            }
+            $texto = $this->infNFe
+                ->item(0)
+                ->getElementsByTagName('infUnidCarga')
+                ->item(0)
+                ->getElementsByTagName('idUnidCarga')
+                ->item(0)
+                ->nodeValue;
         } elseif ($this->infOutros->item(0) !== null
             && $this->infOutros->item(0)->getElementsByTagName('infUnidCarga') !== null
         ) {
-            $infUnidCarga = $this->infOutros->item(0)->getElementsByTagName('infUnidCarga');
-
-            if ($infUnidCarga->length) {
-                $texto = '';
-            } else {
-                $texto = $infUnidCarga->item(0)->getElementsByTagName('idUnidCarga')->item(0)->nodeValue;
-            }
+            $texto = $this->infOutros
+                ->item(0)
+                ->getElementsByTagName('infUnidCarga')
+                ->item(0)
+                ->getElementsByTagName('idUnidCarga')
+                ->item(0)
+                ->nodeValue;
         } else {
             $texto = '';
         }
