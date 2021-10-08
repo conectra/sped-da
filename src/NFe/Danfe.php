@@ -964,12 +964,21 @@ class Danfe extends Common
         if (!isset($this->nfeProc)) {
             return false;
         }
-        $cStat = $this->getTagValue($this->nfeProc, "cStat");
-        return $cStat == '101' ||
-                $cStat == '151' ||
-                $cStat == '135' ||
-                $cStat == '155' ||
-                $this->situacao_externa == self::SIT_CANCELADA;
+        
+        // os eventos nos xmls mais recentes podem vir dentro de uma tag isolada, sendo necessario mudar a validacao
+        $retEvento = $this->nfeProc->getElementsByTagName('retEvento')->item(0);
+
+        if (!$retEvento) {
+            $cStat = $this->getTagValue($this->nfeProc, "cStat");
+            // validacao para xmls antigos
+            return in_array($cStat, ['101', '151', '135', '155']) || $this->situacao_externa == self::SIT_CANCELADA;
+        } else {
+            $infEvento = $retEvento->getElementsByTagName('infEvento')->item(0);
+            $cStat = $this->getTagValue($infEvento, 'cStat');
+            $tpEvento= $this->getTagValue($infEvento, "tpEvento");
+            // validacao para novos xmls
+            return in_array($cStat, ['101', '151', '135', '155']) || (string) $tpEvento === '110111';
+        }
     }
 
     protected function pNotaDPEC()
