@@ -753,30 +753,36 @@ class DacteV3 extends Common
         $this->pdf->Line($x, $y1 + 8, $w + 3, $y1 + 8);
         $toma = $this->getTagValue($this->ide, "indGlobalizado");
         //0-Remetente;1-Expedidor;2-Recebedor;3-Destinatário;4 - Outros
-        if ($toma==1) {
-            $aFont = array(
-                'font' => $this->fontePadrao,
-                'size' => 11,
-                'style' => '');
-            $this->pTextBox($x-14.5, $y2 + 3.5, $w * 0.5, $h1, 'X', $aFont, 'T', 'C', 0, '', false);
-        } else {
-            $aFont = array(
-                'font' => $this->fontePadrao,
-                'size' => 11,
-                'style' => '');
-            $this->pTextBox($x+3.5, $y2 + 3.5, $w * 0.5, $h1, 'X', $aFont, 'T', 'C', 0, '', false);
-        }
+        $aFont = array(
+            'font' => $this->fontePadrao,
+            'size' => 11,
+            'style' => '');
+        $this->pTextBox($toma == 1 ? $x-12.5 : $x+3.5, $y2 + 3.5, $w * 0.5, $h1, 'X', $aFont, 'T', 'C', 0, '', false);
         $aFont = $this->formatNegrito;
-        $this->pdf->Line($x+3, $x+71, $x+3, $x+75);
-        $this->pdf->Line($x+8, $x+71, $x+8, $x+75);
-        $this->pdf->Line($x+3, $x+71, $x+8, $x+71);
-        $this->pdf->Line($x+3, $x+75, $x+8, $x+75);
-        $this->pTextBox($x-6, $y2+1.4 + 3, $w * 0.5, $h1, 'SIM', $aFont, 'T', 'C', 0, '', false);
-        $this->pdf->Line($x+18, $x+71, $x+18, $x+75);
-        $this->pdf->Line($x+23, $x+71, $x+23, $x+75);
-        $this->pdf->Line($x+18, $x+71, $x+23, $x+71);
-        $this->pdf->Line($x+18, $x+75, $x+23, $x+75);
-        $this->pTextBox($x+9.8, $y2+1.4 + 3, $w * 0.5, $h1, 'NÃO', $aFont, 'T', 'C', 0, '', false);
+        // Validação para quando possuir mais de uma pagina e a linha acompanhar o 'X' do sim ou não
+        if ($totPag == 1) {
+            $this->pdf->Line($x+2, $x+71, $x+2, $x+75);
+            $this->pdf->Line($x+7, $x+71, $x+7, $x+75);
+            $this->pdf->Line($x+2, $x+71, $x+7, $x+71);
+            $this->pdf->Line($x+2, $x+75, $x+7, $x+75);
+            $this->pTextBox($x-6, $y2+1.4 + 3, $w * 0.5, $h1, 'SIM', $aFont, 'T', 'C', 0, '', false);
+            $this->pdf->Line($x+18, $x+71, $x+18, $x+75);
+            $this->pdf->Line($x+23, $x+71, $x+23, $x+75);
+            $this->pdf->Line($x+18, $x+71, $x+23, $x+71);
+            $this->pdf->Line($x+18, $x+75, $x+23, $x+75);
+            $this->pTextBox($x+9.8, $y2+1.4 + 3, $w * 0.5, $h1, 'NÃO', $aFont, 'T', 'C', 0, '', false);
+        } else {
+            $this->pdf->Line($x+2, $x+48, $x+2, $x+52);
+            $this->pdf->Line($x+7, $x+48, $x+7, $x+52);
+            $this->pdf->Line($x+2, $x+48, $x+7, $x+48);
+            $this->pdf->Line($x+2, $x+52, $x+7, $x+52);
+            $this->pTextBox($x-6, $y2+1.4 + 3, $w * 0.5, $h1, 'SIM', $aFont, 'T', 'C', 0, '', false);
+            $this->pdf->Line($x+18, $x+48, $x+18, $x+52);
+            $this->pdf->Line($x+23, $x+48, $x+23, $x+52);
+            $this->pdf->Line($x+18, $x+48, $x+23, $x+48);
+            $this->pdf->Line($x+18, $x+52, $x+23, $x+52);
+            $this->pTextBox($x+9.8, $y2+1.4 + 3, $w * 0.5, $h1, 'NÃO', $aFont, 'T', 'C', 0, '', false);
+        }
         //FORMA DE PAGAMENTO
         $texto = 'INF.DO CT-E GLOBALIZADO';
         $wd = 36;
@@ -2557,19 +2563,21 @@ class DacteV3 extends Common
             $aFont = $this->formatPadrao;
             $this->pTextBox($x, $y, $w * 0.13, $h, $texto, $aFont, 'T', 'L', 0, '');
             $x += $w * 0.14;
-            if ($this->modal == '1') {
-                if ($this->lota == 1) {
-                    $this->pdf->Line($x, $y, $x, $y + 31.5);
-                } else {
-                    $this->pdf->Line($x, $y, $x, $y + 49.5);
-                }
-            } elseif ($this->modal == '2') {
-                $this->pdf->Line($x, $y, $x, $y + 49.5);
-            } elseif ($this->modal == '3') {
-                $this->pdf->Line($x, $y, $x, $y + 34.1);
-            } else {
-                $this->pdf->Line($x, $y, $x, $y + 21.5);
-            }
+            // Linha vertical do modal
+            // Comentado pois a linha passava do modal e não teria como ter o controle de quantas chaves tem dentro do modal
+//            if ($this->modal == '1') {
+//                if ($this->lota == 1) {
+//                    $this->pdf->Line($x, $y, $x, $y + 31.5);
+//                } else {
+//                    $this->pdf->Line($x, $y, $x, $y + 49.5);
+//                }
+//            } elseif ($this->modal == '2') {
+//                $this->pdf->Line($x, $y, $x, $y + 49.5);
+//            } elseif ($this->modal == '3') {
+//                $this->pdf->Line($x, $y, $x, $y + 34.1);
+//            } else {
+//                $this->pdf->Line($x, $y, $x, $y + 21.5);
+//            }
             $texto = $descr1;
             $aFont = $this->formatPadrao;
             $this->pTextBox($x, $y, $w * 0.10, $h, $texto, $aFont, 'T', 'L', 0, '');
