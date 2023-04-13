@@ -2533,9 +2533,9 @@ class DacteV3 extends Common
             //$h = 9 + 3.5 ;// segunda linha
             //$h = 9 + 3.5+ 3.5 ;// segunda linha
             $h = (( ( count($this->arrayNFe)/2 ) - 9) * 3.5)+9;
-            if (count($this->arrayNFe)%2 !=0) {
-                $h = $h+3.5;
-            } // Caso tenha apenas 1 registro na ultima linha
+            if (count($this->arrayNFe)%2 !=0 || (count($this->arrayNFe) - $contador) %2 == 0) {
+                $h = $h+4;
+            } // Caso tenha apenas 1 registro na ultima linha ou seja impar
             $texto = 'DOCUMENTOS ORIGINÁRIOS - CONTINUACÃO';
             $aFont = $this->formatPadrao;
             $this->pTextBox($x, $y, $w, $h, $texto, $aFont, 'T', 'C', 1, '');
@@ -2583,13 +2583,13 @@ class DacteV3 extends Common
             $this->pTextBox($x, $y, $w * 0.13, $h, $texto, $aFont, 'T', 'L', 0, '');
             $auxX = $oldX;
             $yIniDados += 3;
-            while ($contador < (count($this->arrayNFe))) {
+            while ($contador <= (count($this->arrayNFe))) {
                 if ($contador%(116*($i-1)) == 0) {
 //                    $contador++;
                     break;
                 }
                 $tp = 'NF-e';
-                $chaveNFe = $this->arrayNFe[$contador];
+                $chaveNFe = $this->arrayNFe[$contador - 1];
                 $numNFe = substr($chaveNFe, 25, 9);
                 $serieNFe = substr($chaveNFe, 22, 3);
                 $doc = $serieNFe . '/' . $numNFe;
