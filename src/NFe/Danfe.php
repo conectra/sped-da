@@ -2615,7 +2615,7 @@ class Danfe extends Common
                     $hValorUnitario = round(($linhaValorUnitario * 2), 2);
                     $h = $h > $hValorUnitario ? $h : $hValorUnitario;
                 } else {
-                    $textoValorUnitario = number_format($vUnCom, 4, ",", ".");
+                    $textoValorUnitario = $vUnCom;
                 }
 
                 $hUsado += $h;
