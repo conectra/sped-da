@@ -612,9 +612,9 @@ class Danfe extends Common
             if ($this->textoAdic != '') {
                 $this->textoAdic .= ". \r\n";
             }
-            $this->textoAdic .= !empty($this->getTagValue($this->infAdic, "infCpl")) ?
-                'Inf. Contribuinte: ' .
-                $this->pAnfavea($this->getTagValue($this->infAdic, "infCpl")) : '';
+            $this->textoAdic .= !empty($this->getTagValue($this->infAdic, "infCpl"))
+                ? 'Inf. Contribuinte: ' . $this->pAnfavea($this->getTagValue($this->infAdic, "infCpl"))
+                : '';
             $infPedido = $this->pGeraInformacoesDaTagCompra();
             if ($infPedido != "") {
                 $this->textoAdic .= $infPedido;
@@ -824,12 +824,18 @@ class Danfe extends Common
         if ($cdata == '') {
             return '';
         }
+
+        // ajusta a quebra de linha para não interferir nas validações das informações complementares
+        $cdata = str_replace('<br/>', "\n", $cdata);
+        $cdata = str_replace('<br />', "\n", $cdata);
+
         //remove qualquer texto antes ou depois da tag CDATA
         $cdata = str_replace('<![CDATA[', '<CDATA>', $cdata);
         $cdata = str_replace(']]>', '</CDATA>', $cdata);
         $cdata = preg_replace('/\s\s+/', ' ', $cdata);
         $cdata = str_replace("> <", "><", $cdata);
         $len = strlen($cdata);
+
         $startPos = strpos($cdata, '<');
         if ($startPos === false) {
             return $cdata;
@@ -851,17 +857,20 @@ class Danfe extends Common
         } else {
             $parte3 = '';
         }
+
         $texto = trim($parte1) . ' ' . trim($parte3);
+
         if (strpos($parte2, '<CDATA>') === false) {
             $cdata = '<CDATA>' . $parte2 . '</CDATA>';
         } else {
             $cdata = $parte2;
         }
+
         //Retira a tag <FONTE IBPT> (caso existir) pois não é uma estrutura válida XML
         $cdata = str_replace('<FONTE IBPT>', '', $cdata);
         //carrega o xml CDATA em um objeto DOM
         $dom = new Dom();
-        $dom->loadXML($cdata, LIBXML_NOBLANKS | LIBXML_NOEMPTYTAG);
+        @$dom->loadXML($cdata, LIBXML_NOBLANKS | LIBXML_NOEMPTYTAG);
         //$xml = $dom->saveXML();
         //grupo CDATA infADprod
         $id = $dom->getElementsByTagName('id')->item(0);
@@ -3085,6 +3094,7 @@ class Danfe extends Common
         }
         $aFont = array('font' => $this->fontePadrao, 'size' => 7, 'style' => 'B');
         $this->pTextBox($x, $y, $w, 8, $texto, $aFont, 'T', 'L', 0, '');
+
         //INFORMAÇÕES COMPLEMENTARES
         $texto = "INFORMAÇÕES COMPLEMENTARES";
         $y += 3;
@@ -3098,6 +3108,7 @@ class Danfe extends Common
         $y += 1;
         $aFont = array('font' => $this->fontePadrao, 'size' => 7, 'style' => '');
         $this->pTextBox($x, $y + 2, $w - 2, $h - 3, $this->textoAdic, $aFont, 'T', 'L', 0, '', false);
+
         //RESERVADO AO FISCO
         $texto = "RESERVADO AO FISCO";
         $x += $w;
