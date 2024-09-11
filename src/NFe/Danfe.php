@@ -357,6 +357,14 @@ class Danfe extends Common
         //se for passado o xml
         if (!empty($this->xml)) {
             $this->dom = new Dom();
+
+            // Remove caracteres não imprimíveis que podem quebrar a leitura do XML - @author Mathias Artur Schulz <mathias@conectra.com.br> (20-06-2024)
+            // Tabela de conversão ASCII, decimal, hexadecimal, octal e binário:
+            // https://www.ibm.com/docs/pt-br/aix/7.3?topic=adapters-ascii-decimal-hexadecimal-octal-binary-conversion-table
+            // A linha abaixo ignora qualquer caractere com valor ASCII entre 0 e 31 (caracteres não imprimíveis) ou o caractere com valor ASCII 127 (DEL)
+            // O modificador 'u' indica que estamos tratando o xml como UTF-8
+            $this->xml = preg_replace('/[\x00-\x1F\x7F]/u', '', $this->xml);
+
             $this->dom->loadXML($this->xml);
             $this->nfeProc    = $this->dom->getElementsByTagName("nfeProc")->item(0);
             $this->infNFe     = $this->dom->getElementsByTagName("infNFe")->item(0);
