@@ -378,9 +378,19 @@ class Damdfe extends Common
         $this->pTextBox($x, $y, $w, 6);
         $bH = 13;
         $bW = round(($w), 0);
-        $this->pdf->SetFillColor(0, 0, 0);
-        $this->pdf->Code128($x+5, $y+7.5, $this->chMDFe, $bW-10, $bH);
-        $this->pdf->SetFillColor(255, 255, 255);
+        
+        if (!empty($this->nProt)) {
+            $this->pdf->SetFillColor(0, 0, 0);
+            $this->pdf->Code128($x+5, $y+7.5, $this->chMDFe, $bW-10, $bH);
+            $this->pdf->SetFillColor(255, 255, 255);
+        } else {
+            $this->pdf->SetTextColor(90, 90, 90);
+            $texto = "SEM VALOR FISCAL";
+            $aFont = array('font' => $this->fontePadrao, 'size' => 14, 'style' => 'B');
+            $this->pTextBox($x, $y+3, $w, $bH, $texto, $aFont, 'T', 'C', 0, '');
+            $this->pdf->SetTextColor(0, 0, 0);
+        }
+        
         $y = $y + 22;
         $this->pTextBox($x, $y, $w, 8);
         $aFont = array('font'=>$this->fontePadrao, 'size'=>8, 'style'=>'I');
@@ -512,6 +522,9 @@ class Damdfe extends Common
 
         if ($this->qrCodMDFe !== null) {
             $this->pQRDAMDFE($y-2);
+        } else {
+            // Se não houver QR Code (MDFe sem protocolo), exibe "SEM VALOR FISCAL"
+            $this->pSemValorFiscalNoQRCodeArea($y-2);
         }
 
         $aFont = array('font' => $this->fontePadrao, 'size' => 10, 'style' => 'B');
@@ -557,9 +570,19 @@ class Damdfe extends Common
         $this->pTextBox($x, $y, $maxW, 20);
         $bH = 16;
         $w = $maxW;
-        $this->pdf->SetFillColor(0, 0, 0);
-        $this->pdf->Code128($x + 5, $y+2, $this->chMDFe, $maxW - 10, $bH);
-        $this->pdf->SetFillColor(255, 255, 255);
+        
+        if (!empty($this->nProt)) {
+            $this->pdf->SetFillColor(0, 0, 0);
+            $this->pdf->Code128($x + 5, $y+2, $this->chMDFe, $maxW - 10, $bH);
+            $this->pdf->SetFillColor(255, 255, 255);
+        } else {
+            $this->pdf->SetTextColor(90, 90, 90);
+            $texto = "SEM VALOR FISCAL";
+            $aFont = array('font' => $this->fontePadrao, 'size' => 14, 'style' => 'B');
+            $this->pTextBox($x, $y+5, $maxW, $bH, $texto, $aFont, 'T', 'C', 0, '');
+            $this->pdf->SetTextColor(0, 0, 0);
+        }
+        
         $y = $y + 22;
         $this->pTextBox($x, $y, $maxW, 10);
         $aFont = array('font'=>$this->fontePadrao, 'size'=>8, 'style'=>'I');
@@ -757,9 +780,18 @@ class Damdfe extends Common
         $this->pTextBox($x1, $y, $maxW / 2, 20);
         $bH = 16;
         $w = $maxW;
-        $this->pdf->SetFillColor(0, 0, 0);
-        $this->pdf->Code128($x1 + 5, $y + 2, $this->chMDFe, ($maxW / 2) - 10, $bH);
-        $this->pdf->SetFillColor(255, 255, 255);
+        
+        if (!empty($this->nProt)) {
+            $this->pdf->SetFillColor(0, 0, 0);
+            $this->pdf->Code128($x1 + 5, $y + 2, $this->chMDFe, ($maxW / 2) - 10, $bH);
+            $this->pdf->SetFillColor(255, 255, 255);
+        } else {
+            $this->pdf->SetTextColor(90, 90, 90);
+            $texto = "SEM VALOR FISCAL";
+            $aFont = array('font' => $this->fontePadrao, 'size' => 14, 'style' => 'B');
+            $this->pTextBox($x1, $y+5, $maxW / 2, $bH, $texto, $aFont, 'T', 'C', 0, '');
+            $this->pdf->SetTextColor(0, 0, 0);
+        }
 
         // protocolo de autorização
         $y = $y + 20;
@@ -958,6 +990,38 @@ class Damdfe extends Common
         // prepare a base64 encoded "data url"
         $pic = 'data://text/plain;base64,' . base64_encode($qrcode);
         $this->pdf->image($pic, $xQr, $yQr, $wQr, $hQr, 'PNG');
+    }
+
+    /**
+     * Desenha "SEM VALOR FISCAL" na área do QR Code quando não houver protocolo
+     * 
+     * @param float $y Posição Y
+     */
+    protected function pSemValorFiscalNoQRCodeArea($y = 0)
+    {
+        $margemInterna = $this->margemInterna;
+        $wQr = 30;
+        $hQr = 30;
+        $yQr = ($y + $margemInterna);
+        if ($this->orientacao == 'P') {
+            $xQr = 160;
+        } else {
+            $xQr = 235;
+        }
+        
+        // Desenha um box com borda na área do QR Code
+        $this->pTextBox($xQr, $yQr, $wQr, $hQr);
+        
+        // Define cor cinza para o texto
+        $this->pdf->SetTextColor(90, 90, 90);
+        
+        // Escreve "SEM VALOR FISCAL" rotacionado
+        $aFont = array('font' => $this->fontePadrao, 'size' => 9, 'style' => 'B');
+        $texto = "SEM VALOR\nFISCAL";
+        $this->pTextBox($xQr, $yQr + 8, $wQr, $hQr - 16, $texto, $aFont, 'C', 'C', 0, '');
+        
+        // Restaura cor preta
+        $this->pdf->SetTextColor(0, 0, 0);
     }
 
 
